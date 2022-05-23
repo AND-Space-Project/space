@@ -2,12 +2,15 @@
 import { useState } from 'react';
 import './App.css';
 import logo from './images/ADlogo.png';
+import { ParseEmail } from './services/nameParser.js';
 
 function App() {
 
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('ANDi@and.digital');
+  const fullName = ParseEmail(email);
 
   const handleSubmit = (e) => {
+    console.log(fullName)
     console.log(email);
   }
 
@@ -29,7 +32,7 @@ function App() {
 
         <button onClick={handleSubmit()}>Continue</button>
         {
-          email ? <p>Welcome {email}</p>
+          email ? <p>Welcome {fullName}</p>
           :
           ''
         }
