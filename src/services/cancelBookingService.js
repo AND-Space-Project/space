@@ -40,11 +40,12 @@ module.exports = function CancelBooking(bookingDate, email) {
     function Delete(ClubDayId) {
         var request = new Request(
             'DELETE FROM [dbo].[Bookings] WHERE ClubDayId = @clubDayId AND Email = @email',
-            (err) => {
+            (err, rowCount) => {
                 if (err) {
                     console.error(err.message);
                 }
-                FindNextInQueue(ClubDayId);
+                console.log("Deleted: " + rowCount);
+                FindNumberOfDesksAvailable(ClubDayId, rowCount);
             }
         );
 
@@ -54,15 +55,47 @@ module.exports = function CancelBooking(bookingDate, email) {
         connection.execSql(request);
     }
 
-    function FindNextInQueue(ClubDayId) {
-        var bookingId = -1;
+    function FindNumberOfDesksAvailable(ClubDayId, numberToUpdate) {
         var request = new Request(
-            'UPDATE [dbo].[Bookings] SET Waitlist = 0, DateModified = GETDATE() WHERE BookingId = (SELECT TOP 1 BookingId FROM [dbo].[Bookings] WHERE ClubDayId = @clubDayId AND Waitlist = 1 ORDER BY DateCreated ASC)',
+            'SELECT TOP 1 @availableDesks=AvailableDesks FROM [dbo].[ClubDayInfo] WHERE ClubDayId = @clubDayId',
             (err) => {
                 if (err) {
                     console.error(err.message);
+                } else {
+                    FindNextInQueue(ClubDayId, numberToUpdate);
                 }
-                return; 
+            }
+        );
+
+        request.addParameter('clubDayId', TYPES.Int, ClubDayId);
+        request.addOutputParameter('availableDesks', TYPES.Int);
+
+        request.on('returnValue', (paramName, value) => {
+            if (numberToUpdate > value) {
+                numberToUpdate = value;
+            }
+        });
+        
+        connection.execSql(request);
+
+    }
+
+    function FindNextInQueue(ClubDayId, numberToUpdate) {
+        numberToUpdate = numberToUpdate - 1;
+        var request = new Request(
+            'UPDATE [dbo].[Bookings] SET Waitlist = 0, DateModified = GETDATE() WHERE BookingId = (SELECT TOP 1 BookingId FROM [dbo].[Bookings] WHERE ClubDayId = @clubDayId AND Waitlist = 1 ORDER BY DateCreated ASC)',
+            (err, rowCount) => {
+                if (err) {
+                    console.error(err.message);
+                    return;
+                }
+                if (numberToUpdate > 0 && rowCount > 0) {
+                    console.log("Number left to update: " + numberToUpdate);
+                    FindNextInQueue(ClubDayId, numberToUpdate);
+                } else {
+                    console.log("Loops left: " + numberToUpdate)
+                    return;
+                }
             }
         );
 
