@@ -100,19 +100,23 @@ module.exports = function CreateBooking(bookingDate, email) {
     }
 
     function CheckDesksAvailable(ClubDayId, totalDesks) {
+        var avlDesks = -1;
         var request = new Request(
-            'SELECT * from [dbo].[Bookings] where ClubDayId = @clubDayId',
-            (err, rowCount) => {
+            'SELECT TOP 1 @avlDesks=AvailableDesks from [dbo].[AvailableTotalDesks] where ClubDayId = @clubDayId',
+            (err) => {
                 if (err) {
                     console.error(err.message);
                 } else {
-                    availableDesk = (rowCount < totalDesks);
-                    console.log ("Space available: " + availableDesk);
-                    CreateDeskBooking(ClubDayId, !availableDesk);
+                    CreateDeskBooking(ClubDayId, (avlDesks <= 0));
                 }
             }
         );
         request.addParameter('clubDayId', TYPES.Int, ClubDayId);
+        request.addOutputParameter('avlDesks', TYPES.Int);
+
+        request.on('returnValue', (paramName, value) => {
+            avlDesks = value;
+        });
         
         connection.execSql(request);
     }
@@ -135,6 +139,7 @@ module.exports = function CreateBooking(bookingDate, email) {
         
         connection.execSql(request);
     }
-    
+
+    connection.close();
     return;
 }
