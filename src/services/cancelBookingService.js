@@ -44,13 +44,29 @@ module.exports = function CancelBooking(bookingDate, email) {
                 if (err) {
                     console.error(err.message);
                 }
-
-                return;
+                FindNextInQueue(ClubDayId);
             }
         );
 
         request.addParameter('clubDayId', TYPES.Int, ClubDayId);
         request.addParameter('email', TYPES.VarChar, email);
+
+        connection.execSql(request);
+    }
+
+    function FindNextInQueue(ClubDayId) {
+        var bookingId = -1;
+        var request = new Request(
+            'UPDATE [dbo].[Bookings] SET Waitlist = 0, DateModified = GETDATE() WHERE BookingId = (SELECT TOP 1 BookingId FROM [dbo].[Bookings] WHERE ClubDayId = @clubDayId AND Waitlist = 1 ORDER BY DateCreated ASC)',
+            (err) => {
+                if (err) {
+                    console.error(err.message);
+                }
+                return; 
+            }
+        );
+
+        request.addParameter('clubDayId', TYPES.Int, ClubDayId);
 
         connection.execSql(request);
     }
