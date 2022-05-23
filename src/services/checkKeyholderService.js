@@ -16,7 +16,7 @@ module.exports = function CheckKeyHolder(bookingDate) {
 
     function FindKeyholder() {
         var request = new Request(
-            'SELECT TOP 1 @keyholderCount=Keyholders FROM [dbo].[AvailableTotalDesks] WHERE Date = @bookingDate AND ClubId = @clubId',
+            'SELECT TOP 1 @keyholderCount=Keyholders FROM [dbo].[ClubDayInfo] WHERE Date = @bookingDate AND ClubId = @clubId',
             (err) => {
                 if (err) {
                     console.error(err.message);

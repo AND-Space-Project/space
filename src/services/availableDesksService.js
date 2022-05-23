@@ -12,7 +12,7 @@ module.exports = function CheckAvailableDesks(bookingDate, clubId) {
         }
 
         var request = new Request(
-            'SELECT TOP 1 @avlDesks=AvailableDesks, @totalDesks=TotalDesks FROM [dbo].[AvailableTotalDesks] where Date = @date AND ClubId = @clubId',
+            'SELECT TOP 1 @avlDesks=AvailableDesks, @totalDesks=TotalDesks FROM [dbo].[ClubDayInfo] where Date = @date AND ClubId = @clubId',
             (err) => {
                 if (err) {
                     console.error(err.message);
