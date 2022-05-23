@@ -2,7 +2,7 @@ const { Connection, Request, TYPES } = require("tedious");
 const GetConnection = require('./initiateDbConnection.js');
 const MURRAY_ID = 1;
 
-module.exports = function CreateBooking(bookingDate, email) {
+module.exports = function CreateBooking(bookingDate, email, isKeyholder) {
     connection = GetConnection();
     connection.connect(function(err) {
         if (err) {
@@ -25,8 +25,7 @@ module.exports = function CreateBooking(bookingDate, email) {
                     if (rowCount > 0) {
                         console.log("Date Found");
                         CheckDesksAvailable(ClubDayId, totalDesks);
-                    }
-                    else {
+                    } else {
                         console.log("Date not found");
                         FindNumDesks();
                     }
@@ -102,7 +101,7 @@ module.exports = function CreateBooking(bookingDate, email) {
     function CheckDesksAvailable(ClubDayId, totalDesks) {
         var avlDesks = -1;
         var request = new Request(
-            'SELECT TOP 1 @avlDesks=AvailableDesks from [dbo].[AvailableTotalDesks] where ClubDayId = @clubDayId',
+            'SELECT TOP 1 @avlDesks=AvailableDesks from [dbo].[ClubDayInfo] where ClubDayId = @clubDayId',
             (err) => {
                 if (err) {
                     console.error(err.message);
@@ -123,7 +122,7 @@ module.exports = function CreateBooking(bookingDate, email) {
 
     function CreateDeskBooking(ClubDayId, waitlist) {
         var request = new Request(
-            'INSERT INTO [dbo].[Bookings] (ClubDayId, Email, Waitlist, DateCreated) VALUES (@clubDayId, @email, @waitlist, GETDATE())',
+            'INSERT INTO [dbo].[Bookings] (ClubDayId, Email, Waitlist, DateCreated, IsKeyholder) VALUES (@clubDayId, @email, @waitlist, GETDATE(), @isKeyholder)',
             (err) => {
                 if (err) {
                     console.error(err.message);
@@ -136,6 +135,7 @@ module.exports = function CreateBooking(bookingDate, email) {
         request.addParameter('clubDayId', TYPES.Int, ClubDayId);
         request.addParameter('email', TYPES.VarChar, email);
         request.addParameter('waitlist', TYPES.Bit, waitlist);
+        request.addParameter('isKeyholder', TYPES.Bit, isKeyholder);
         
         connection.execSql(request);
     }
