@@ -101,7 +101,7 @@ module.exports = function CreateBooking(bookingDate, email, isKeyholder) {
     function CheckDesksAvailable(ClubDayId, totalDesks) {
         var avlDesks = -1;
         var request = new Request(
-            'SELECT TOP 1 @avlDesks=AvailableDesks from [dbo].[AvailableTotalDesks] where ClubDayId = @clubDayId',
+            'SELECT TOP 1 @avlDesks=AvailableDesks from [dbo].[ClubDayInfo] where ClubDayId = @clubDayId',
             (err) => {
                 if (err) {
                     console.error(err.message);
