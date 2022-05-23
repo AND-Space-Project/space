@@ -7,8 +7,8 @@ function App() {
 
   const [email, setEmail] = useState('');
 
-  const handleSubmit = () => {
-    console.log(email)
+  const handleSubmit = (e) => {
+    console.log(email);
   }
 
   return (
@@ -27,7 +27,12 @@ function App() {
           onChange={ e => setEmail(e.target.value)}>
         </input>
 
-        <button onSubmit={handleSubmit()}>Continue</button>
+        <button onClick={handleSubmit()}>Continue</button>
+        {
+          email ? <p>Welcome {email}</p>
+          :
+          ''
+        }
       </div>
 
     </div>
