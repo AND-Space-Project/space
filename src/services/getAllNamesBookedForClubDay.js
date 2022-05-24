@@ -45,14 +45,14 @@ module.exports = function GetAllNames(bookingDate, clubId) {
     function GetNames(ClubDayId) {
         let names = new Array();
         var request = new Request(
-            'SELECT * FROM [dbo].[Bookings] WHERE ClubDayId = @clubDayId AND Waitlist = 0 ORDER BY IsKeyholder DESC',
+            'SELECT * FROM [dbo].[Bookings] WHERE ClubDayId = @clubDayId AND Waitlist = 0 ORDER BY IsKeyholder DESC, DateCreated ASC',
             (err, rowCount, rows) => {
                 if (err) {
                     console.error(err.message);
                 } else {
                     if (rowCount > 0) {
                         names.forEach(name => {
-                            console.log("\n" + name);
+                            console.log(name);
                         });
                     } else {
                         console.log("No bookings"); // No bookings for that date
@@ -64,14 +64,18 @@ module.exports = function GetAllNames(bookingDate, clubId) {
         request.addParameter('clubDayId', TYPES.Int, ClubDayId);
 
         request.on("row", columns => {
-            email = "";
+            let email = "";
+            let isKeyholder = false;
             columns.forEach(column => {
                 if (column.metadata.colName == "Email") {
                     email = column.value;
                 }
+                if (column.metadata.colName == "IsKeyholder") {
+                    isKeyholder = column.value;
+                }
                 if (column.metadata.colName == "FullName") {
                     if (column.value == null) {
-                        names.push(ParseName(email));
+                        names.push(ParseName(email) + ((isKeyholder) ? " - Keyholder" : ""));
                     } else {
                         names.push(column.value);
                     }
