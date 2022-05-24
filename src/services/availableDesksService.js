@@ -16,8 +16,14 @@ module.exports = function CheckAvailableDesks(bookingDate, clubId) {
             (err) => {
                 if (err) {
                     console.error(err.message);
+                    return;
                 } 
-                return avlTotalDesks;
+                if (avlTotalDesks[0] == null) {
+                    FindDefaultDesks();
+                } else {
+                    console.log(avlTotalDesks[0] + "/" + avlTotalDesks[1]);
+                }
+
             }
         );
         request.addParameter('date', TYPES.Date, bookingDate);
@@ -36,4 +42,28 @@ module.exports = function CheckAvailableDesks(bookingDate, clubId) {
         connection.execSql(request);
     });
 
+    function FindDefaultDesks() {
+        var request = new Request(
+            'SELECT TOP 1 @numDesks=DefaultNumDesks from [dbo].[Clubs] where ClubId = @clubId',
+            (err) => {
+                if (err) {
+                    console.error(err.message);
+                } else {
+                    console.log(avlTotalDesks[0] + "/" + avlTotalDesks[1]);
+                }
+            }
+        );
+        request.addParameter('clubId', TYPES.Int, clubId);
+        request.addOutputParameter('numDesks', TYPES.Int);
+
+        request.on('returnValue', (paramName, value) => {
+            avlTotalDesks[0] = value;
+            avlTotalDesks[1] = value;
+        });
+        
+        connection.execSql(request);
+    }
+
+    connection.close();
+    return;
 }
