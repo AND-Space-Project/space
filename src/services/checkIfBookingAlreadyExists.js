@@ -1,8 +1,7 @@
 const { Connection, Request, TYPES } = require("tedious");
-const ParseName = require('./nameParser.js');
 const GetConnection = require('./initiateDbConnection.js');
 
-module.exports = function GetAllNames(bookingDate, clubId) {
+module.exports = function CheckClubDayForBooking(bookingDate, email, clubId) {
     connection = GetConnection();
     connection.connect(function(err) {
         if (err) {
@@ -23,9 +22,9 @@ module.exports = function GetAllNames(bookingDate, clubId) {
                 } else {
                     if (rowCount > 0) {
                         console.log("Date Found");
-                        GetNames(ClubDayId);
+                        FindBooking(ClubDayId);
                     } else {
-                        console.log("Date not found"); // No bookings for that date
+                        console.log("Date not found");
                     }
                 }
             }
@@ -42,48 +41,27 @@ module.exports = function GetAllNames(bookingDate, clubId) {
         connection.execSql(request);
     }
 
-    function GetNames(ClubDayId) {
-        let names = new Array();
+    function FindBooking(ClubDayId) {
         var request = new Request(
-            'SELECT * FROM [dbo].[Bookings] WHERE ClubDayId = @clubDayId AND Waitlist = 0 ORDER BY IsKeyholder DESC, DateCreated ASC',
-            (err, rowCount, rows) => {
+            'SELECT * FROM [dbo].[Bookings] WHERE ClubDayId = @clubDayId AND Email = @email',
+            (err, rowCount) => {
                 if (err) {
                     console.error(err.message);
                 } else {
                     if (rowCount > 0) {
-                        names.forEach(name => {
-                            console.log(name);
-                        });
+                        console.log("User Bookings: " + rowCount);
                     } else {
-                        console.log("No bookings"); // No bookings for that date
+                        console.log("No Bookings");
                     }
                 }
             }
         );
 
         request.addParameter('clubDayId', TYPES.Int, ClubDayId);
-
-        request.on("row", columns => {
-            let email = "";
-            let isKeyholder = false;
-            columns.forEach(column => {
-                if (column.metadata.colName == "Email") {
-                    email = column.value;
-                }
-                if (column.metadata.colName == "IsKeyholder") {
-                    isKeyholder = column.value;
-                }
-                if (column.metadata.colName == "FullName") {
-                    if (column.value == null) {
-                        names.push(ParseName(email) + ((isKeyholder) ? " - Keyholder" : ""));
-                    } else {
-                        names.push(column.value);
-                    }
-                }
-            });
-          });
+        request.addParameter('email', TYPES.VarChar, email);
         
         connection.execSql(request);
+
     }
 
     connection.close();
