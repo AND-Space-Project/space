@@ -1,8 +1,11 @@
 const { Connection, Request, TYPES } = require("tedious");
 const GetConnection = require('./initiateDbConnection.js');
-const MURRAY_ID = 1;
 
-module.exports = function CreateBooking(bookingDate, email, isKeyholder) {
+module.exports = function CreateBooking(clubId, bookingDate, email, isKeyholder, fullName) {
+    if (isKeyholder == true && fullName !== null) { // fullName field should be null if not a guest since name can be gathered from Name Parser
+        console.log("Cannot be a guest and keyholder");
+        return;
+    }
     connection = GetConnection();
     connection.connect(function(err) {
         if (err) {
@@ -34,7 +37,7 @@ module.exports = function CreateBooking(bookingDate, email, isKeyholder) {
         );
 
         request.addParameter('bookingDate', TYPES.Date, bookingDate);
-        request.addParameter('clubId', TYPES.Int, MURRAY_ID);
+        request.addParameter('clubId', TYPES.Int, clubId);
         request.addOutputParameter('Id', TYPES.Int);
         request.addOutputParameter('totalDesks', TYPES.Int);
 
@@ -68,7 +71,7 @@ module.exports = function CreateBooking(bookingDate, email, isKeyholder) {
                 }
             }
         );
-        request.addParameter('clubId', TYPES.Int, MURRAY_ID);
+        request.addParameter('clubId', TYPES.Int, clubId);
         request.addOutputParameter('numDesks', TYPES.Int);
         
         request.on('returnValue', (paramName, value) => {
@@ -90,7 +93,7 @@ module.exports = function CreateBooking(bookingDate, email, isKeyholder) {
                 }
             }
         );
-        request.addParameter('clubId', TYPES.Int, MURRAY_ID);
+        request.addParameter('clubId', TYPES.Int, clubId);
         request.addParameter('date', TYPES.Date, bookingDate);
         request.addParameter('numDesks', TYPES.Int, numDesks);
         
@@ -98,7 +101,7 @@ module.exports = function CreateBooking(bookingDate, email, isKeyholder) {
 
     }
 
-    function CheckDesksAvailable(ClubDayId, totalDesks) {
+    function CheckDesksAvailable(ClubDayId) {
         var avlDesks = -1;
         var request = new Request(
             'SELECT TOP 1 @avlDesks=AvailableDesks from [dbo].[ClubDayInfo] where ClubDayId = @clubDayId',
@@ -122,7 +125,7 @@ module.exports = function CreateBooking(bookingDate, email, isKeyholder) {
 
     function CreateDeskBooking(ClubDayId, waitlist) {
         var request = new Request(
-            'INSERT INTO [dbo].[Bookings] (ClubDayId, Email, Waitlist, DateCreated, IsKeyholder) VALUES (@clubDayId, @email, @waitlist, GETDATE(), @isKeyholder)',
+            'INSERT INTO [dbo].[Bookings] (ClubDayId, Email, Waitlist, DateCreated, IsKeyholder, FullName) VALUES (@clubDayId, @email, @waitlist, GETDATE(), @isKeyholder, @fullName)',
             (err) => {
                 if (err) {
                     console.error(err.message);
@@ -132,10 +135,12 @@ module.exports = function CreateBooking(bookingDate, email, isKeyholder) {
                 }
             }
         );
+        
         request.addParameter('clubDayId', TYPES.Int, ClubDayId);
         request.addParameter('email', TYPES.VarChar, email);
         request.addParameter('waitlist', TYPES.Bit, waitlist);
         request.addParameter('isKeyholder', TYPES.Bit, isKeyholder);
+        request.addParameter('fullName', TYPES.VarChar, fullName);
         
         connection.execSql(request);
     }
