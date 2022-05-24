@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import './styling/Calendar.css';
+import logo from '../images/ADlogo.png'
 
 function Calendar() {
     const [date, setDate] = useState('');
@@ -18,16 +20,33 @@ function Calendar() {
         }
 
         const today = year + "-" + month + "-" + day;
+
+        let maxMonth = parseInt(month) + 2;
+        if (maxMonth < 10) {
+            maxMonth = "0" + maxMonth
+        }
+        let max = year + "-" + maxMonth + "-" + day;
+
     
     return (
-        <div>
-            <input 
-                type="date" 
-                id="pickdate" 
-                name="pickdate"
-                min={today}
-                max="2022-06-30"
-            />
+        <div className='calendar'>
+
+            <div className='calendar-img'>
+                <img src={logo}></img>
+            </div>
+
+            <div className='datepicker'>
+                <h1>Pick a Date</h1>
+                <input 
+                    type="date" 
+                    id="pickdate" 
+                    name="pickdate"
+                    min={today}
+                    max={max}
+                    onChange={ e => setDate(e.target.value)}
+                />
+            </div>
+            
         </div>
   )
 }
