@@ -32,7 +32,6 @@
       "PORT": 80
     },
     "dbUrl": "and-space.database.windows.net",
-    "dbUsername": "space-admin",
-    "dbPassword": "XdZc8AXusxS6qT"
+    "dbUsername": "space-admin"
   }
 }
