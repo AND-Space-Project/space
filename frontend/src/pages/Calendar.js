@@ -37,7 +37,7 @@ function Calendar() {
             </div>
 
             <div className='datepicker'>
-                <h1>Pick a Date</h1>
+                <h1>Select Date</h1>
                 <input 
                     type="date" 
                     id="pickdate" 
