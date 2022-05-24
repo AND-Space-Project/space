@@ -1,9 +1,8 @@
 const { Connection, Request, TYPES } = require("tedious");
 const GetConnection = require('./initiateDbConnection.js');
 
-module.exports = function CheckAvailableDesks(bookingDate, clubId) {
-    var avlTotalDesks = [-1, -1];
-
+module.exports = function CheckDayNotice(bookingDate, clubId) {
+    var notice = "";
     connection = GetConnection();
     connection.connect(function(err) {
         if (err) {
@@ -12,25 +11,21 @@ module.exports = function CheckAvailableDesks(bookingDate, clubId) {
         }
 
         var request = new Request(
-            'SELECT TOP 1 @avlDesks=AvailableDesks, @totalDesks=TotalDesks FROM [dbo].[ClubDayInfo] where Date = @date AND ClubId = @clubId',
+            'SELECT TOP 1 @notice=Notice FROM [dbo].[ClubDayInfo] where Date = @date AND ClubId = @clubId',
             (err) => {
                 if (err) {
                     console.error(err.message);
-                } 
-                return avlTotalDesks;
+                } else {
+                    console.log("Notice: " + notice)
+                }
             }
         );
         request.addParameter('date', TYPES.Date, bookingDate);
         request.addParameter('clubId', TYPES.Int, clubId);
-        request.addOutputParameter('avlDesks', TYPES.Int);
-        request.addOutputParameter('totalDesks', TYPES.Int);
+        request.addOutputParameter('notice', TYPES.VarChar);
 
         request.on('returnValue', (paramName, value) => {
-            if (paramName == 'avlDesks') {
-                avlTotalDesks[0] = value;
-            } else {
-                avlTotalDesks[1] = value;
-            }
+            notice = value;
         });
         
         connection.execSql(request);
