@@ -1,8 +1,7 @@
 const { Connection, Request, TYPES } = require("tedious");
 const GetConnection = require('./initiateDbConnection.js');
-const MURRAY_ID = 1;
 
-module.exports = function CheckKeyHolder(bookingDate) {
+module.exports = function CheckKeyHolder(bookingDate, clubId) {
     var keyholder = false;
     connection = GetConnection();
     connection.connect(function(err) {
@@ -27,7 +26,7 @@ module.exports = function CheckKeyHolder(bookingDate) {
         );
 
         request.addParameter('bookingDate', TYPES.Date, bookingDate);
-        request.addParameter('clubId', TYPES.Int, MURRAY_ID);
+        request.addParameter('clubId', TYPES.Int, clubId);
         request.addOutputParameter('keyholderCount', TYPES.Int);
 
         request.on('returnValue', (paramName, value) => {
