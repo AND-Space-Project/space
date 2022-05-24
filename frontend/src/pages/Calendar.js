@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './styling/Calendar.css';
-import logo from '../images/ADlogo.png'
+import logo from '../images/ADlogo.png';
+import Login from './Login.js';
 
 function Calendar() {
     const [date, setDate] = useState('');
