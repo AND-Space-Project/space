@@ -1,0 +1,22 @@
+.calendar {
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.datepicker>input {
+    height: 10vh;
+    width: 50vw;
+    text-align: center;
+    font-size: 1.5rem;
+    border: none;
+    outline: 5px solid rgb(243, 52, 52);
+    border-radius: 5px;
+}
+
+.calendar-img>img {
+    width: 40%;
+}
+
