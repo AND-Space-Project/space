@@ -6,6 +6,8 @@ import UserInfo from '../services/UserInfo';
 
 function Calendar() {
     const [date, setDate] = useState('');
+    const [click, setClick] = useState(false);
+    const [keyholder, setKeyholder] = useState(false);
     const userName = UserInfo.getFullName();
     const userEmail = UserInfo.getEmail();
     const userClub = UserInfo.getClubId();
@@ -32,6 +34,23 @@ function Calendar() {
         }
         let max = year + "-" + maxMonth + "-" + day;
 
+        const showForm = () => {
+            setClick(!click);
+        }
+
+        let open;
+        if(click) {
+            open =
+            <div className='form'>
+                <i onClick={showForm} class="fas fa-times fa-2x"></i>
+                <p>Date selected: {date}</p>
+                <p>Keyholder: <input type="checkbox" onClick={ () => setKeyholder(!keyholder)}></input></p>
+                <p>Notices: </p>
+                <p>Desks available:</p>
+                <button>Create Booking</button>
+            </div>
+        }
+
     
     return (
         <div className='calendar'>
@@ -49,9 +68,11 @@ function Calendar() {
                     min={today}
                     max={max}
                     onChange={ e => setDate(e.target.value)}
+                    value={date}
                 />
             </div>
-            
+            <button id="select-date" onClick={showForm}>Select</button>
+            { open }
         </div>
   )
 }
