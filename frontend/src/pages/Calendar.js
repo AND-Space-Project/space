@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './styling/Calendar.css';
-import logo from '../images/ADlogo.png';
+import spacelogo from '../images/SPACE-Logo3.png';
 import Login from './Login.js';
 
 function Calendar() {
@@ -33,7 +33,7 @@ function Calendar() {
         <div className='calendar'>
 
             <div className='calendar-img'>
-                <img src={logo}></img>
+                <img src={spacelogo}></img>
             </div>
 
             <div className='datepicker'>
