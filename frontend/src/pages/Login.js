@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import './styling/Login.css';
 import logo from '../images/ADlogo.png';
-import spacelogo from '../images/SPACE-Logo3.png';
+import spacelogo from '../images/SPACE-Logo4.png';
 import UserInfo from '../services/UserInfo';
 import Welcome from './Welcome';
 
