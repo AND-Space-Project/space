@@ -1,9 +1,9 @@
 import React from 'react';
 import { useState } from 'react';
 import './styling/Login.css';
-import logo from '../images/ADlogo.png';
 import spacelogo from '../images/SPACE-Logo3.png';
 import Welcome from './Welcome';
+import { Link } from 'react-router-dom';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -25,15 +25,17 @@ function Login() {
                     type="text" 
                     id="email" 
                     placeholder="Example: john.smith@and.digital"
-                    onChange={ e => setEmail(e.target.value)}>
+                    onChange={ e => setEmail(e.target.value)}
+                    >   
                 </input>
 
                 <select name="Club" id="club">
                     <option value='1'>Club Murray</option>
                 </select>
 
-                <button onClick={handleSubmit()}>Continue</button>
+                <Link to='calendar'><button type="button">Continue</button></Link>
                 <Welcome email={email}/>
+                
             </div>
 
         </div>
