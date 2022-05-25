@@ -1,13 +1,15 @@
 import React from 'react';
 import Login from './pages/Login.js';
 import Calendar from './pages/Calendar.js';
+import Nav from './pages/Nav.js';
 
 function App() {
 
   return (
     <div className="App">
-      {/* <Login /> */}
-      <Calendar />
+      <Nav />
+      <Login />
+      {/* <Calendar /> */}
     </div>
   );
 }
