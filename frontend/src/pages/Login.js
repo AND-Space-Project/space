@@ -1,15 +1,24 @@
 import React from 'react';
 import { useState } from 'react';
 import './styling/Login.css';
-import spacelogo from '../images/SPACE-Logo3.png';
+import logo from '../images/ADlogo.png';
+import spacelogo from '../images/SPACE-Logo4.png';
+import UserInfo from '../services/UserInfo';
 import Welcome from './Welcome';
 import { Link } from 'react-router-dom';
 
 function Login() {
     const [email, setEmail] = useState('');
-    
+    const fullName = ParseEmail(email);
+    const [clubId, setClubId] = useState(1);
+
     const handleSubmit = (e) => {
-        console.log(email);
+        UserInfo.setEmail(email);
+        UserInfo.setClubId(clubId);
+        UserInfo.setFullName(fullName);
+        console.log(UserInfo.getEmail());
+        console.log(UserInfo.getClubId());
+        console.log(UserInfo.getFullName());
     }
 
     return(
@@ -29,8 +38,9 @@ function Login() {
                     >   
                 </input>
 
-                <select name="Club" id="club">
+                <select name="Club" value={clubId} onChange={ e => setClubId(e.target.value)}>
                     <option value='1'>Club Murray</option>
+                    <option value='2'>Club Dekker</option>
                 </select>
 
                 <Link to='calendar'><button type="button">Continue</button></Link>
