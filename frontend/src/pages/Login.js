@@ -36,7 +36,7 @@ function Login() {
                     type="text" 
                     id="email" 
                     placeholder="Example: john.smith@and.digital"
-                    onChange={ inputEmail }>   
+                    onKeyUp={ inputEmail }>   
                 </input>
 
                 <select name="Club" value={clubId} onChange={ e => setClubId(e.target.value)}>

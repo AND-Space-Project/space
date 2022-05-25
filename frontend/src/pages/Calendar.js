@@ -54,6 +54,11 @@ function Calendar() {
     
     return (
         <div className='calendar'>
+            <div className='navbar'>
+                <div className='welcomelabel'>
+                    <label>Welcome {userName} ({userEmail})</label>
+                </div>
+            </div>
 
             <div className='calendar-img'>
                 <img src={spacelogo}></img>
