@@ -9,7 +9,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Nav />
+        {/* <Nav /> */}
         <Switch />
           <Route exact path="/" component={Login}/>
           <Route path="/calendar" component={Calendar}/>

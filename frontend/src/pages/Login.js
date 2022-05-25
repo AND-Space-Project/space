@@ -5,6 +5,7 @@ import logo from '../images/ADlogo.png';
 import spacelogo from '../images/SPACE-Logo4.png';
 import UserInfo from '../services/UserInfo';
 import Welcome from './Welcome';
+import { ParseEmail } from '../services/nameParser';
 import { Link } from 'react-router-dom';
 
 function Login() {
