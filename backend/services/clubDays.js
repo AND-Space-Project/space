@@ -1,6 +1,7 @@
 const db = require('./db');
 const helper = require('../helper');
 const config = require('../config');
+const ParseEmail = require('./nameParser.js');
 
 async function getAll(){
     const rows = await db.query(
@@ -11,6 +12,41 @@ async function getAll(){
     return {
         data
     }
+}
+
+async function getClubDayInfo(date, clubId) {
+    var obj = await db.query(
+        `SELECT ClubDayId FROM ClubDay WHERE Date LIKE "${date}" AND ClubId = "${clubId}"`
+      );
+    var clubDayId = obj[0].ClubDayId;
+
+    var namesObj = await db.query(
+        `SELECT Email, IsKeyholder, GuestName FROM Bookings WHERE Waitlist=0 AND ClubDayId = "${clubDayId}"`
+      );
+
+    var names = new Array();
+    
+    namesObj.forEach(row => {
+        let name = "";
+        if (row.GuestName !== null && row.GuestName !== "") {
+            names.push(row.GuestName);
+        } else {
+            name = ParseEmail(row.Email);
+            if (row.IsKeyholder == 1) {
+                name += " - Keyholder";
+            }
+            names.push(name);
+        }
+    });
+
+    const rows = await db.query(
+        `SELECT ClubDayId, NumDesks, NumDesks - (SELECT COUNT(*) FROM Bookings WHERE Waitlist = 0 AND ClubDayId = "${clubDayId}") as DesksAvailable, Notice FROM ClubDay WHERE ClubDayId = ${clubDayId}`
+      );
+
+    var data = helper.emptyOrRows(rows);
+    data.push(names);
+
+    return { data }
 }
 
 async function create(clubDay){
@@ -47,6 +83,7 @@ async function update(id, notice, desks){
 
 module.exports = {
   getAll,
+  getClubDayInfo,
   create,
   update
 }

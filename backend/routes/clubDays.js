@@ -11,6 +11,15 @@ router.get('/', async function(req, res, next) {
   }
 });
 
+router.get('/:id&:date', async function(req, res, next) {
+    try {
+      res.json(await clubDays.getClubDayInfo(req.params.date, req.params.id));
+    } catch (err) {
+      console.error(`Error while getting club day `, err.message);
+      next(err);
+    }
+});
+
 router.post('/', async function(req, res, next) {
     try {
         res.json(await clubDays.create(req.body));

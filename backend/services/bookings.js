@@ -7,11 +7,9 @@ async function get(){
     `SELECT * FROM Bookings`
   );
   const data = helper.emptyOrRows(rows);
-  //const meta = {page};
 
   return {
     data
-    //meta
   }
 }
 
