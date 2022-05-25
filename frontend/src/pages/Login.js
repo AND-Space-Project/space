@@ -3,14 +3,12 @@ import { useState } from 'react';
 import './styling/Login.css';
 import logo from '../images/ADlogo.png';
 import spacelogo from '../images/SPACE-Logo3.png';
-import { ParseEmail } from '../services/nameParser.js';
+import Welcome from './Welcome';
 
 function Login() {
     const [email, setEmail] = useState('');
-    const fullName = ParseEmail(email);
-
+    
     const handleSubmit = (e) => {
-        console.log(fullName)
         console.log(email);
     }
 
@@ -35,15 +33,12 @@ function Login() {
                 </select>
 
                 <button onClick={handleSubmit()}>Continue</button>
-                {
-                email ? <p>Welcome {fullName}</p>
-                :
-                ''
-                }
+                <Welcome email={email}/>
             </div>
 
         </div>
     )
 }
+
 
 export default Login;
