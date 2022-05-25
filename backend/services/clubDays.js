@@ -18,6 +18,21 @@ async function getClubDayInfo(date, clubId) {
     var obj = await db.query(
         `SELECT ClubDayId FROM ClubDay WHERE Date LIKE "${date}" AND ClubId = "${clubId}"`
       );
+
+    if (obj.length < 1) {
+        var clubquery = await db.query(
+            `SELECT DefaultNumDesks FROM Clubs WHERE ClubId = "${clubId}"`
+          );
+        let newClubDay = {
+            ClubId: clubId,
+            Date: date,
+            NumDesks: clubquery[0].DefaultNumDesks,
+        };
+        await create(newClubDay);
+        obj = await db.query(
+            `SELECT ClubDayId FROM ClubDay WHERE Date LIKE "${date}" AND ClubId = "${clubId}"`
+          );
+    }  
     var clubDayId = obj[0].ClubDayId;
 
     var namesObj = await db.query(
@@ -54,7 +69,7 @@ async function create(clubDay){
     `INSERT INTO ClubDay 
     (ClubId, Date, NumDesks, Notice, DateCreated) 
     VALUES 
-    (${clubDay.ClubId}, "${clubDay.Date}", ${clubDay.NumDesks}, "${clubDay.Notice}", "${new Date().toISOString().slice(0, 19).replace('T', ' ')}")`
+    (${clubDay.ClubId}, "${clubDay.Date}", ${clubDay.NumDesks}, null, "${new Date().toISOString().slice(0, 19).replace('T', ' ')}")`
   );
 
   let message = 'Error in creating Club Day';
