@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import './styling/Calendar.css';
-import spacelogo from '../images/SPACE-Logo3.png';
+import spacelogo from '../images/SPACE-Logo4.png';
 import Login from './Login.js';
+import UserInfo from '../services/UserInfo';
 
 function Calendar() {
     const [date, setDate] = useState('');
     const [click, setClick] = useState(false);
     const [keyholder, setKeyholder] = useState(false);
+    const userName = UserInfo.getFullName();
+    const userEmail = UserInfo.getEmail();
+    const userClub = UserInfo.getClubId();
     // const current = new Date();
     // const currentDate = `${current.getFullYear()}/${current.getMonth()+1}/${current.getDate()}`;
 

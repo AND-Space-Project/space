@@ -13,7 +13,8 @@ function Login() {
     const fullName = ParseEmail(email);
     const [clubId, setClubId] = useState(1);
 
-    const handleSubmit = (e) => {
+    const inputEmail = (e) => {
+        setEmail(e.target.value);
         UserInfo.setEmail(email);
         UserInfo.setClubId(clubId);
         UserInfo.setFullName(fullName);
@@ -35,8 +36,7 @@ function Login() {
                     type="text" 
                     id="email" 
                     placeholder="Example: john.smith@and.digital"
-                    onChange={ e => setEmail(e.target.value)}
-                    >   
+                    onChange={ inputEmail }>   
                 </input>
 
                 <select name="Club" value={clubId} onChange={ e => setClubId(e.target.value)}>
