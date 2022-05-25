@@ -29,9 +29,9 @@ router.put('/:id', async function(req, res, next) {
     }
 });   
 
-router.delete('/:email', async function(req, res, next) {
+router.delete('/', async function(req, res, next) {
     try {
-      res.json(await bookings.remove(req.params.email));
+      res.json(await bookings.remove(req.body));
     } catch (err) {
       console.error(`Error while deleting booking`, err.message);
       next(err);

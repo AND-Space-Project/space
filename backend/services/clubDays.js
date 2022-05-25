@@ -17,12 +17,12 @@ async function getAll(){
 async function getClubDayInfo(date, clubId) {
     var obj = await db.query(
         `SELECT ClubDayId FROM ClubDay WHERE Date LIKE "${date}" AND ClubId = "${clubId}"`
-      );
+        );
 
     if (obj.length < 1) {
         var clubquery = await db.query(
             `SELECT DefaultNumDesks FROM Clubs WHERE ClubId = "${clubId}"`
-          );
+            );
         let newClubDay = {
             ClubId: clubId,
             Date: date,
@@ -31,13 +31,13 @@ async function getClubDayInfo(date, clubId) {
         await create(newClubDay);
         obj = await db.query(
             `SELECT ClubDayId FROM ClubDay WHERE Date LIKE "${date}" AND ClubId = "${clubId}"`
-          );
+            );
     }  
-    var clubDayId = obj[0].ClubDayId;
+    var clubDayID = obj[0].ClubDayId;
 
     var namesObj = await db.query(
-        `SELECT Email, IsKeyholder, GuestName FROM Bookings WHERE Waitlist=0 AND ClubDayId = "${clubDayId}"`
-      );
+        `SELECT Email, IsKeyholder, GuestName FROM Bookings WHERE Waitlist=0 AND ClubDayId = "${clubDayID}"`
+        );
 
     var names = new Array();
     
@@ -55,11 +55,13 @@ async function getClubDayInfo(date, clubId) {
     });
 
     const rows = await db.query(
-        `SELECT ClubDayId, NumDesks, NumDesks - (SELECT COUNT(*) FROM Bookings WHERE Waitlist = 0 AND ClubDayId = "${clubDayId}") as DesksAvailable, Notice FROM ClubDay WHERE ClubDayId = ${clubDayId}`
-      );
+        `SELECT ClubDayId, NumDesks, NumDesks - (SELECT COUNT(*) FROM Bookings WHERE Waitlist = 0 AND ClubDayId = "${clubDayID}") as DesksAvailable, Notice FROM ClubDay WHERE ClubDayId = ${clubDayID}`
+        );
 
     var data = helper.emptyOrRows(rows);
     data.push(names);
+
+    
 
     return { data }
 }
