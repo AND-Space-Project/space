@@ -22,7 +22,7 @@ async function create(bookingDetails){
     `INSERT INTO Bookings 
     (ClubDayId, Email, Waitlist, IsKeyholder, GuestName, DateCreated) 
     VALUES 
-    (${obj.data['0'].ClubDayId}, "${bookingDetails.Email}", ${isWaitlist}, 0, "${bookingDetails.GuestName}", "${new Date().toISOString().slice(0, 19).replace('T', ' ')}")`
+    (${obj.data['0'].ClubDayId}, "${bookingDetails.Email}", ${isWaitlist}, ${bookingDetails.IsKeyholder}, "${bookingDetails.GuestName}", "${new Date().toISOString().slice(0, 19).replace('T', ' ')}")`
   );
 
   let message = 'Error in creating booking';

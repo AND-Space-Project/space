@@ -54,7 +54,7 @@ function Calendar() {
                 "ClubId": UserInfo.getClubId(),
                 "Date": {date},
                 "Email": UserInfo.getEmail(),
-                "IsKeyHolder": false,
+                "IsKeyholder": keyholder,
                 "GuestName": "",
             }).then((response) => {
                 console.log(response);
@@ -114,7 +114,7 @@ function Calendar() {
                 <p>Desks available: {avlDesks}</p>
                 <div>
                     <label>Set yourself as a keyholder?</label>
-                    <input type="checkbox"></input>
+                    <input onClick={ () => setKeyholder(!keyholder)} type="checkbox"></input>
                 </div>
                 <button onClick={createBooking}>{createBookingLabel}</button>
                 <button hidden={hideDeleteButton} onClick={cancelBookings}>Cancel all my bookings</button>
