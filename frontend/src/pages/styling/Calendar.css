@@ -78,9 +78,14 @@
     border-radius: 12px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     font-family: 'Poppins', sans-serif;
+    overflow: auto;
 }
 
-button {
+.andi-list>li {
+    list-style: none;
+}
+
+.btn-two {
     width: 25%;
     height: 5vh;
     background-color: rgb(243, 52, 52);
@@ -95,6 +100,11 @@ button {
     margin-top: 2%;
 }
 
-.form>p {
+.btn-two:hover {
+    background-color: black;
+}
+
+.form>p>span {
     font-weight: bold;
 }
+
