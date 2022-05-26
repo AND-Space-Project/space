@@ -23,7 +23,7 @@ function Calendar() {
     let selectedDateInfo;
     const [avlDesks, setAvlDesks] = useState('');
     const [notice, setNotice] = useState('');
-    const [names, setNames] = useState('');
+    const [names, setNames] = useState([]);
     const [keyholderExists, setKeyholderExists] = useState('');
     const [createBookingLabel, setCreateBookingLabel] = useState('Create Booking');
     const [hideDeleteButton, setHideDeleteButton] = useState(true);
@@ -112,10 +112,21 @@ function Calendar() {
                 <p>Keyholder: {keyholderExists}</p>
                 <p>Notices: {notice}</p>
                 <p>Desks available: {avlDesks}</p>
-                <p>{names}</p>
-                <br></br>
+                <div>
+                    <label>Set yourself as a keyholder?</label>
+                    <input type="checkbox"></input>
+                </div>
                 <button onClick={createBooking}>{createBookingLabel}</button>
                 <button hidden={hideDeleteButton} onClick={cancelBookings}>Cancel all my bookings</button>
+                <p>Attending ANDIs</p>
+                {names.map((person) => (
+                    <div>
+                        <li>{person}</li>
+                    </div>
+                ))}
+                
+
+                
             </div>
         }
 
