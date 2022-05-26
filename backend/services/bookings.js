@@ -17,6 +17,11 @@ async function get(){
 async function create(bookingDetails){
   var obj = await clubDays.getClubDayInfo(bookingDetails.Date.date, bookingDetails.ClubId);
   var isWaitlist = (obj.data['0'].DesksAvailable < 1);
+  if (!isWaitlist) {
+      if (!bookingDetails.IsKeyholder && obj.data['0'].DesksAvailable == 1) {
+          isWaitlist = true;
+      }
+  }
 
   const result = await db.query(
     `INSERT INTO Bookings 

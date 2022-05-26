@@ -21,6 +21,7 @@ function Calendar() {
     const year = currentDate.getFullYear();
 
     let selectedDateInfo;
+    const [desksForKeyholder, setDesksForKeyholder] = useState('');
     const [avlDesks, setAvlDesks] = useState('');
     const [notice, setNotice] = useState('');
     const [names, setNames] = useState([]);
@@ -49,6 +50,16 @@ function Calendar() {
             populateInfo();
         }     
 
+        const clickKeyholder = (k) => {
+            setKeyholder(k);
+            console.log(keyholder);
+            if ((desksForKeyholder == 1 && k) || desksForKeyholder > 1) {
+                setCreateBookingLabel("Create Booking");
+            } else {
+                setCreateBookingLabel("Join Waitlist");
+            }
+        }
+
         const createBooking = () => {
             Axios.post('http://localhost:2000/bookings', {
                 "ClubId": UserInfo.getClubId(),
@@ -58,6 +69,9 @@ function Calendar() {
                 "GuestName": "",
             }).then((response) => {
                 console.log(response);
+                if (desksForKeyholder == 0) {
+                    setCreateBookingLabel("Joined Waitlist");
+                }
                 populateInfo();
             });
         }
@@ -78,9 +92,10 @@ function Calendar() {
             }).then((response) => {
                 console.log(response);
                 selectedDateInfo = response.data.data;
+                setDesksForKeyholder(selectedDateInfo['0'].DesksAvailable)
                 setAvlDesks(selectedDateInfo['0'].DesksAvailable+"/"+selectedDateInfo['0'].NumDesks);
                 setNotice(selectedDateInfo['0'].Notice);
-                if (selectedDateInfo['0'].DesksAvailable < 1) {
+                if (selectedDateInfo['0'].DesksAvailable < 2 ) {
                     setCreateBookingLabel("Join Waitlist");
                 } else {
                     setCreateBookingLabel("Create Booking");
@@ -114,7 +129,7 @@ function Calendar() {
                 <p>Desks available: {avlDesks}</p>
                 <div>
                     <label>Set yourself as a keyholder?</label>
-                    <input onClick={ () => setKeyholder(!keyholder)} type="checkbox"></input>
+                    <input onClick={ () => clickKeyholder(!keyholder)} type="checkbox"></input>
                 </div>
                 <button onClick={createBooking}>{createBookingLabel}</button>
                 <button hidden={hideDeleteButton} onClick={cancelBookings}>Cancel all my bookings</button>
