@@ -64,6 +64,10 @@ function Calendar() {
             alert("Joined waitlist");
         }
 
+        const confirmBooking = () => {
+            alert("Comfirmed booking");
+        }
+
         const createBooking = () => {
             Axios.post('http://localhost:2000/bookings', {
                 "ClubId": UserInfo.getClubId(),
@@ -75,6 +79,8 @@ function Calendar() {
                 console.log(response);
                 if ((desksForKeyholder == 1 && !keyholder) || (desksForKeyholder == 0)) {
                     confirmWaitlist();
+                } else {
+                    confirmBooking();
                 }
                 populateInfo();
             });
