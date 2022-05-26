@@ -19,9 +19,6 @@ function Login() {
         UserInfo.setEmail(email);
         UserInfo.setClubId(clubId);
         UserInfo.setFullName(fullName);
-        console.log(UserInfo.getEmail());
-        console.log(UserInfo.getClubId());
-        console.log(UserInfo.getFullName());
     }
 
     return(

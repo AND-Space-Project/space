@@ -51,7 +51,6 @@ function Calendar() {
 
         const clickKeyholder = (k) => {
             setKeyholder(k);
-            console.log(keyholder);
             if ((desksForKeyholder == 1 && k) || desksForKeyholder > 1) {
                 setCreateBookingLabel("Create Booking");
             } else {
@@ -75,7 +74,6 @@ function Calendar() {
                 "IsKeyholder": keyholder,
                 "GuestName": "",
             }).then((response) => {
-                console.log(response);
                 if ((desksForKeyholder == 1 && !keyholder) || (desksForKeyholder == 0)) {
                     confirmWaitlist();
                 } else {
@@ -91,7 +89,6 @@ function Calendar() {
                 "Date": {date},
                 "Email": UserInfo.getEmail()
             }}).then((response) => {
-                console.log(response);
                 populateInfo();
             });
         }
@@ -99,7 +96,6 @@ function Calendar() {
         const populateInfo = () => {
             Axios.get('http://localhost:2000/clubdays/'+UserInfo.getClubId()+'&'+date, {
             }).then((response) => {
-                console.log(response);
                 selectedDateInfo = response.data.data;
                 setDesksForKeyholder(selectedDateInfo['0'].DesksAvailable)
                 setAvlDesks(selectedDateInfo['0'].DesksAvailable+"/"+selectedDateInfo['0'].NumDesks);
@@ -125,10 +121,6 @@ function Calendar() {
                 setNames(namesList);
                 setKeyholderExists(keyholder);
             });
-        }
-
-        const confirm = () => {
-            alert("Your booking is confirmed");
         }
 
         let open;
