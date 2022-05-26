@@ -73,7 +73,7 @@ function Calendar() {
                 "GuestName": "",
             }).then((response) => {
                 console.log(response);
-                if (desksForKeyholder == 0) {
+                if ((desksForKeyholder == 1 && !keyholder) || (desksForKeyholder == 0)) {
                     confirmWaitlist();
                 }
                 populateInfo();
