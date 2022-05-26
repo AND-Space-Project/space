@@ -15,14 +15,14 @@ async function get(){
 }
 
 async function create(bookingDetails){
-  var obj = await clubDays.getClubDayInfo(bookingDetails.Date, bookingDetails.ClubId);
+  var obj = await clubDays.getClubDayInfo(bookingDetails.Date.date, bookingDetails.ClubId);
   var isWaitlist = (obj.data['0'].DesksAvailable < 1);
 
   const result = await db.query(
     `INSERT INTO Bookings 
     (ClubDayId, Email, Waitlist, IsKeyholder, GuestName, DateCreated) 
     VALUES 
-    (${obj.data['0'].ClubDayId}, "${bookingDetails.Email}", ${isWaitlist}, ${bookingDetails.IsKeyholder}, "${bookingDetails.GuestName}", "${new Date().toISOString().slice(0, 19).replace('T', ' ')}")`
+    (${obj.data['0'].ClubDayId}, "${bookingDetails.Email}", ${isWaitlist}, 0, "${bookingDetails.GuestName}", "${new Date().toISOString().slice(0, 19).replace('T', ' ')}")`
   );
 
   let message = 'Error in creating booking';

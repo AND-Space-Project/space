@@ -8,7 +8,7 @@ var UserInfo = (function() {
     };
   
     var setEmail = function(Email) {
-      email = Email;     
+      email = Email.trim();     
     };
 
     var getClubId = function() {
