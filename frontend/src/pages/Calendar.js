@@ -3,6 +3,7 @@ import './styling/Calendar.css';
 import spacelogo from '../images/SPACE-Logo4.png';
 import Login from './Login.js';
 import UserInfo from '../services/UserInfo';
+import Axios from 'axios';
 
 function Calendar() {
     const [date, setDate] = useState('');
@@ -36,6 +37,7 @@ function Calendar() {
 
         const showForm = () => {
             setClick(!click);
+            createBooking();
         }
 
         let open;
@@ -48,10 +50,24 @@ function Calendar() {
                 <p>Notices: </p>
                 <p>Desks available:</p>
                 <button>Create Booking</button>
+                
             </div>
         }
 
-    
+        const createBooking = () => {
+            Axios.post('http://localhost:2000/bookings', {
+                ClubId: UserInfo.getClubId,
+                Date: {date},
+                Email: UserInfo.getEmail,
+                IsKeyHolder: 0,
+                GuestName: "",
+            }).then((response) => {
+                console.log(response);
+            });
+        }
+
+        
+        
     return (
         <div className='calendar'>
             <div className='navbar'>
