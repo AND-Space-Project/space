@@ -12,6 +12,7 @@ function Login() {
     const [email, setEmail] = useState('');
     const fullName = ParseEmail(email);
     const [clubId, setClubId] = useState(1);
+    var disableButton = (fullName == 'ANDi');
 
     const inputEmail = (e) => {
         setEmail(e.target.value);
@@ -44,7 +45,7 @@ function Login() {
                     <option value='2'>Club Dekker</option>
                 </select>
 
-                <Link to='calendar'><button type="button">Continue</button></Link>
+                <Link to='calendar'><button type="button" disabled={disableButton}>Continue</button></Link>
                 <Welcome email={email}/>
                 
             </div>
