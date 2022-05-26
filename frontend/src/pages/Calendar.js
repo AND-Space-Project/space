@@ -63,11 +63,11 @@ function Calendar() {
         }
 
         const cancelBookings = () => {
-            Axios.delete('http://localhost:2000/bookings', {
+            Axios.delete('http://localhost:2000/bookings', {data : {
                 "ClubId": UserInfo.getClubId(),
                 "Date": {date},
                 "Email": UserInfo.getEmail()
-            }).then((response) => {
+            }}).then((response) => {
                 console.log(response);
                 populateInfo();
             });

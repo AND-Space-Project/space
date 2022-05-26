@@ -50,7 +50,7 @@ async function update(id){
 }
 
 async function remove(bookingDetails){
-  var obj = await clubDays.getClubDayInfo(bookingDetails.Date, bookingDetails.ClubId);
+  var obj = await clubDays.getClubDayInfo(bookingDetails.Date.date, bookingDetails.ClubId);
 
   var bookingsDeleted = await db.query(
     `SELECT COUNT(*) as BookingsDeleted FROM Bookings WHERE Waitlist = 0 AND ClubDayId = ${obj.data['0'].ClubDayId} AND Email LIKE "%${bookingDetails.Email}%"`
