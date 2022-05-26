@@ -46,7 +46,6 @@ function Calendar() {
 
         const showForm = () => {
             setClick(!click);
-            //createBooking();
             populateInfo();
         }     
 
