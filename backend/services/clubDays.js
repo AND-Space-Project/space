@@ -47,7 +47,7 @@ async function getClubDayInfo(date, clubId) {
             names.push(row.GuestName);
         } else {
             name = ParseEmail(row.Email);
-            if (row.IsKeyholder == 1) {
+            if (row.IsKeyholder[0] == 1) {
                 name += " - Keyholder";
             }
             names.push(name);
