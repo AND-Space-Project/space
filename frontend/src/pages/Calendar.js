@@ -60,6 +60,10 @@ function Calendar() {
             }
         }
 
+        const confirmWaitlist = () => {
+            alert("Joined waitlist");
+        }
+
         const createBooking = () => {
             Axios.post('http://localhost:2000/bookings', {
                 "ClubId": UserInfo.getClubId(),
@@ -70,7 +74,7 @@ function Calendar() {
             }).then((response) => {
                 console.log(response);
                 if (desksForKeyholder == 0) {
-                    setCreateBookingLabel("Joined Waitlist");
+                    confirmWaitlist();
                 }
                 populateInfo();
             });
