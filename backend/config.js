@@ -1,9 +1,9 @@
 const config = {
     db: {
-      host: "db4free.net",
-      user: "spacedb",
+      host: "space-db-mysql.mysql.database.azure.com",
+      user: "spacedb@space-db-mysql",
       password: "(password)",
-      database: "spacedb",
+      database: "space-db-mysql",
     },
     listPerPage: 10,
   };
