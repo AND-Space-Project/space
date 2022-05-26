@@ -45,8 +45,7 @@ function Login() {
                     <option value='2'>Club Dekker</option>
                 </select>
 
-                <Link to='calendar'><button type="button" disabled={disableButton}>Continue</button></Link>
-                <Welcome email={email}/>
+                <Link to='calendar'><button className="btn-main" type="button" disabled={disableButton}>Continue</button></Link>
                 
             </div>
 

@@ -103,24 +103,28 @@ function Calendar() {
             });
         }
 
+        const confirm = () => {
+            alert("Your booking is confirmed");
+        }
+
         let open;
         if(click) {
             open =
             <div className='form'>
                 <i onClick={showForm} class="fas fa-times fa-2x"></i>
-                <p>Date selected: {date}</p>
-                <p>Keyholder: {keyholderExists}</p>
-                <p>Notices: {notice}</p>
-                <p>Desks available: {avlDesks}</p>
+                <p><span>Date selected: </span>{date}</p>
+                <p><span>Keyholder: </span>{keyholderExists}</p>
+                <p><span>Notices: </span>{notice}</p>
+                <p><span>Desks available: </span>{avlDesks}</p>
                 <div>
                     <label>Set yourself as a keyholder?</label>
                     <input type="checkbox"></input>
                 </div>
-                <button onClick={createBooking}>{createBookingLabel}</button>
-                <button hidden={hideDeleteButton} onClick={cancelBookings}>Cancel all my bookings</button>
-                <p>Attending ANDIs</p>
+                <button onClick={createBooking} className="btn-two">{createBookingLabel}</button>
+                <button hidden={hideDeleteButton} onClick={cancelBookings} className="btn-two">Cancel all my bookings</button>
+                <p><span>Attending ANDIs </span></p>
                 {names.map((person) => (
-                    <div>
+                    <div className='andi-list'>
                         <li>{person}</li>
                     </div>
                 ))}
