@@ -37,7 +37,7 @@ function Login() {
                     onKeyUp={ inputEmail }>   
                 </input>
 
-                <select name="Club" value={clubId} onChange={ e => setClubId(e.target.value)}>
+                <select id="club" name="Club" value={clubId} onChange={ e => setClubId(e.target.value)}>
                     <option value='1'>Club Murray</option>
                     <option value='2'>Club Dekker</option>
                 </select>
